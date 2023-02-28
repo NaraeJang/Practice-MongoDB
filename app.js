@@ -1,68 +1,61 @@
-const {
-    MongoClient
-} = require("mongodb");
+const mongoose = require('mongoose');
 
-// Replace the uri string with your connection string.
-// const uri =
-//   "mongodb+srv://<user>:<password>@<cluster-url>?retryWrites=true&w=majority";
+mongoose.connect('mongodb://127.0.0.1:27017/personDB');
 
-const url = "mongodb://localhost:27017";
 
-// Create a new MongoClient
-const client = new MongoClient(url);
+const personSchema = new mongoose.Schema({
+    name: String,
+    age: Number
+});
 
-async function main() {
-    try {
-        // ----- Use connect method to connect to the server ----- 
-        await client.connect();
-        console.log('Connected successfully to server');
+const Person = mongoose.model('Person', personSchema);
 
-        // ----- Database Name ----- 
-        const database = client.db('fruitsDB');
-        // ----- Create a collection ----- 
-        const fruitsCollection = database.collection('fruits');
+const person = new Person({
+    name: "John",
+    age: 37
+});
 
-        // ----- Insert a document (data in row) -----
-        // Create an array of documents to insert
-        const docs = [{
-                name: "Apple",
-                score: 8,
-                review: "Great Fruit"
-            },
-            {
-                name: "Orange",
-                score: 6,
-                review: "Kinda Sour"
-            },
-            {
-                name: "Banana",
-                score: 9,
-                review: "Great Stuff"
-            },
-            {
-                name: "Nuts",
-                score: 0,
-                review: "This is not fruit"
-            }
-        ];
+// person.save().then(() => console.log('it is working'));
 
-        const insertResult = await fruitsCollection.insertMany(docs);
-        console.log("Inserted " + insertResult.insertedCount + " documents into the fruitsCollection.");
-        // ----- 3rd cmd (to check whether the data is in mongosh) -----  
-        // (1)mongosh 
-        // (2)show dbs 
-        // (3)use <databseName>
-        // (4)show collections
-        // (5)db.<collectionName>.find()
+const fruitSchema = new mongoose.Schema({
+    name: String,
+    rating: Number,
+    review: String
+});
 
-        // ----- Find all documents -----
-        const findResult = await fruitsCollection.find({}).toArray();
-        console.table(findResult);
+const Fruit = mongoose.model('Fruit', fruitSchema);
 
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-    }
-}
+const fruit = new Fruit({
+    name: "Apple",
+    rating: 1,
+    review: "Somehow I feel it's disgusting"
+});
 
-main().catch(console.dir);
+// fruit.save().then(() => console.log('Successfully saved everything on the server.'));
+
+const kiwi = new Fruit({
+    name: "Kiwi",
+    rating: 10,
+    review: "It is delicious fruit most of time. I never failed about this fruit"
+});
+
+const orange = new Fruit({
+    name: "Orange",
+    rating: 8,
+    review: "Sometimes it's too sour"
+});
+
+const banana = new Fruit({
+    name: "Banana",
+    rating: 4,
+    review: "It's a good fruit to bake a bread but.."
+});
+
+// Fruit.insertMany([kiwi, orange, banana]).then(() =>
+//         console.log('Successfully saved everything on the server.'));
+
+Fruit.find().then((fruits) => {
+    fruits.forEach((fruit) => {
+        console.log(fruit.name);
+    });
+});
