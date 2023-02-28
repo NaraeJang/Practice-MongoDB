@@ -58,4 +58,6 @@ Fruit.find().then((fruits) => {
     fruits.forEach((fruit) => {
         console.log(fruit.name);
     });
+
+    mongoose.connection.close();
 });
