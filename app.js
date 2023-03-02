@@ -32,13 +32,16 @@ const fruitSchema = new mongoose.Schema({
 
 const Fruit = mongoose.model('Fruit', fruitSchema);
 
-const fruit = new Fruit({
-   name: "sugar",
-    rating: 1,
-    review: "This is not a fruit",
-});
+// const fruit = new Fruit({
 
-fruit.save().then(() => console.log('Successfully saved everything on the server.'));
+//     rating: 1,
+//     review: "I just don't like lemon",
+// });
+
+// fruit.save().then(() => console.log('Successfully saved everything on the server.'));
+
+Fruit.updateOne({ _id: '64012da0b78519b2af2acdb6' }, { name: 'Lemon'});
+
 
 // const kiwi = new Fruit({
 //     name: "Kiwi",
@@ -61,10 +64,10 @@ fruit.save().then(() => console.log('Successfully saved everything on the server
 // Fruit.insertMany([kiwi, orange, banana]).then(() =>
 //         console.log('Successfully saved everything on the server.'));
 
-// Fruit.find().then((fruits) => {
-//     fruits.forEach((fruit) => {
-//         console.log(fruit.name);
-//     });
+Fruit.find().then((fruits) => {
+    fruits.forEach((fruit) => {
+        console.log(fruit.name);
+    });
 
-    // mongoose.connection.close();
-// });
+    mongoose.connection.close();
+});
