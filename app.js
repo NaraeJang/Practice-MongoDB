@@ -1,3 +1,4 @@
+const { FindCursor } = require('mongodb');
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://127.0.0.1:27017/personDB');
@@ -15,28 +16,45 @@ const person = new Person({
     age: 37
 });
 
-// person.save().then(() => console.log('it is working'));
+// person.save().then(() => console.log('it is working')).catch(err => {
+//     console.log(err);
+// });
 
-const fruitSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: [true, "Please check your data entry, no name specified!"]
-    },
-    rating: {
-        type: Number,
-        min: 1,
-        max: 10
-    },
-    review: String
+Person.deleteMany({name: 'John'}).then(result => {
+    console.log("Successefully delete all of John.");
 });
 
-const Fruit = mongoose.model('Fruit', fruitSchema);
-
-const fruit = new Fruit({
-name: 'lemon',
-    rating: 1,
-    review: "I just don't like lemon",
+Person.find().then((people) => {
+   people.forEach((person) => {
+    console.log(person.name);
+   });
+   mongoose.connection.close();
 });
+
+
+//----------------------------//
+
+
+// const fruitSchema = new mongoose.Schema({
+//     name: {
+//         type: String,
+//         required: [true, "Please check your data entry, no name specified!"]
+//     },
+//     rating: {
+//         type: Number,
+//         min: 1,
+//         max: 10
+//     },
+//     review: String
+// });
+
+// const Fruit = mongoose.model('Fruit', fruitSchema);
+
+// const fruit = new Fruit({
+// name: 'lemon',
+//     rating: 1,
+//     review: "I just don't like lemon",
+// });
 
 // fruit.save().then(() => console.log('Successfully saved everything on the server.'));
 
@@ -66,14 +84,15 @@ name: 'lemon',
 // Fruit.insertMany([kiwi, orange, banana]).then(() =>
 //         console.log('Successfully saved everything on the server.'));
 
-Fruit.find().then((fruits) => {
-    fruits.forEach((fruit) => {
-        console.log(fruit.name);
-    });
-});
+// Fruit.find().then((fruits) => {
+//     fruits.forEach((fruit) => {
+//         console.log(fruit.name);
+//     });
+//     mongoose.connection.close();
+// });
 
 //Delete data
-Fruit.deleteOne({ name: 'lemon' }).then(result => {
-    mongoose.connection.close();
-    console.log(result);
-}).catch(err => {console.log(err);});
+// Fruit.deleteOne({ name: 'Banana' }).then(result => {
+//     mongoose.connection.close();
+//     console.log(result);
+// }).catch(err => {console.log(err);});
