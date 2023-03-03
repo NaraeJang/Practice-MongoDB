@@ -4,51 +4,73 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/personDB');
 
 
+
+//Schema Part
+const fruitSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, "Please check your data entry, no name specified!"]
+    },
+    rating: {
+        type: Number,
+        min: 1,
+        max: 10
+    },
+    review: String
+});
+
+const Fruit = mongoose.model('Fruit', fruitSchema);
+
 const personSchema = new mongoose.Schema({
     name: String,
-    age: Number
+    age: Number,
+    favouritFruit: fruitSchema
 });
 
 const Person = mongoose.model('Person', personSchema);
 
+
+// Add New Data
+const pineapple = new Fruit({
+    name: "Pineapple",
+    rating: 10,
+    review: "It's delicious fruit."
+})
+
 const person = new Person({
-    name: "John",
-    age: 37
+    name: "Amy",
+    age: 12,
+    favouritFruit: pineapple
+
 });
 
-// person.save().then(() => console.log('it is working')).catch(err => {
-//     console.log(err);
+
+pineapple.save();
+
+person.save().then(() => console.log('it is working')).catch(err => {
+    console.log(err);
+});
+
+
+
+
+// Person.deleteMany({name: 'John'}).then(result => {
+//     console.log("Successefully delete all of John.");
 // });
-
-Person.deleteMany({name: 'John'}).then(result => {
-    console.log("Successefully delete all of John.");
-});
 
 Person.find().then((people) => {
    people.forEach((person) => {
     console.log(person.name);
    });
-   mongoose.connection.close();
 });
 
 
 //----------------------------//
 
 
-// const fruitSchema = new mongoose.Schema({
-//     name: {
-//         type: String,
-//         required: [true, "Please check your data entry, no name specified!"]
-//     },
-//     rating: {
-//         type: Number,
-//         min: 1,
-//         max: 10
-//     },
-//     review: String
-// });
 
-// const Fruit = mongoose.model('Fruit', fruitSchema);
+
+
 
 // const fruit = new Fruit({
 // name: 'lemon',
