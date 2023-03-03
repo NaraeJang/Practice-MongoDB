@@ -1,4 +1,6 @@
-const { FindCursor } = require('mongodb');
+const {
+    FindCursor
+} = require('mongodb');
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://127.0.0.1:27017/personDB');
@@ -31,25 +33,44 @@ const Person = mongoose.model('Person', personSchema);
 
 
 // Add New Data
-const pineapple = new Fruit({
-    name: "Pineapple",
-    rating: 10,
-    review: "It's delicious fruit."
-})
+// const pineapple = new Fruit({
+//     name: "Pineapple",
+//     rating: 10,
+//     review: "It's delicious fruit."
+// });
 
-const person = new Person({
-    name: "Amy",
-    age: 12,
-    favouritFruit: pineapple
+// pineapple.save();
 
+const mango = new Fruit({
+    name: "Mango",
+    rating: 8,
+    review: "Excepting I need to peel the fruit, it is tasty."
 });
 
+mango.save();
 
-pineapple.save();
-
-person.save().then(() => console.log('it is working')).catch(err => {
+Person.updateOne({
+    name: "John"
+}, {
+    favouritFruit: mango
+}).then(result => {
+    console.log(result);
+}).catch(err => {
     console.log(err);
 });
+
+// const person = new Person({
+//     name: "Amy",
+//     age: 12,
+//     favouritFruit: pineapple
+
+// });
+
+
+
+// person.save().then(() => console.log('it is working')).catch(err => {
+//     console.log(err);
+// });
 
 
 
@@ -59,9 +80,9 @@ person.save().then(() => console.log('it is working')).catch(err => {
 // });
 
 Person.find().then((people) => {
-   people.forEach((person) => {
-    console.log(person.name);
-   });
+    people.forEach((person) => {
+        console.log(person.name);
+    });
 });
 
 
